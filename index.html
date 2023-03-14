@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+
+    <!-- google Icons -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,100,0,-25" />
+
+
+
+    <!-- google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"> data-operator="/"
+
+    <!-- CSS File -->
+    <link rel="stylesheet" href="./css/universal.css">
+
+
+</head>
+
+<body>
+
+
+    <!-- main-section -->
+    <section id="main-container">
+
+        <!-- calculator body -->
+        <div id="calculator-body" class="p-5">
+
+            <!-- display row -->
+            <div id="display-screen" >
+                <h1 id="display-screen-text">120999</h1>
+            </div>
+
+            <!-- degree row (frist row) -->
+            <div id="degree-section" class="p-5">
+                <div class="degree-section-item">DEG</div>
+                <div class="degree-section-item">F-E</div>
+            </div>
+
+            <!-- memory section row (second row ) -->
+            <div id="memory-section" class="p-5">
+                <div class="memory-units">MC</div>
+                <div class="memory-units">MR</div>
+                <div class="memory-units">M+</div>
+                <div class="memory-units">M-</div>
+                <div class="memory-units">MS</div>
+            </div>
+
+
+            <!-- trigonometry row (third row) -->
+            <div class="third-row p-5" >
+                <div id="trigonometry" class="third-row-div">
+                    <img src="./assets/trigonometry.png" alt="" height="20px" width="20px">
+                    <span>Trigonometry</span>
+                    <span class="material-symbols-outlined">
+                        expand_more</span>
+                </div>
+                <div id="functions" class="third-row-div">
+                    <img src="./assets/function.png" alt="" height="15px" width="15px">
+                    <span>Function</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </div>
+            </div>
+
+
+            <!-- main-features (6*5 matrix) -->
+            <div class="main-features">
+                <button type="button" class="feature-item">2<sup>nd</sup></button>
+                <button type="button" class="feature-item"> &pi;</button>
+                <button type="button" class="feature-item">e</button>
+                <button type="button" class="feature-item">C</button>
+                <button type="button" class="feature-item"><span
+                        class="material-symbols-outlined">backspace</span></button>
+                <button type="button" class="feature-item">x<sup>2</sup></button>
+                <button type="button" class="feature-item">1/x</button>
+                <button type="button" class="feature-item">|x|</button>
+                <button type="button" class="feature-item">exp</button>
+                <button type="button" class="feature-item">mod</button>
+                <button type="button" class="feature-item"> &#8730;x</button>
+                <button type="button" class="feature-item">(</button>
+                <button type="button" class="feature-item">)</button>
+                <button type="button" class="feature-item">n!</button>
+                <button type="button" class="feature-item" data-operator="/">&#247;</button>
+                <button type="button" class="feature-item">x<sup>y</sup></button>
+                <button type="button" class="feature-item" data-number="7">7</button>
+                <button type="button" class="feature-item" data-number="8">8</button>
+                <button type="button" class="feature-item" data-number="9">9</button>
+                <button type="button" class="feature-item" data-operator="*"> &#xD7;</button>
+                <button type="button" class="feature-item">10 <sup>x</sup></button>
+                <button type="button" class="feature-item"  data-number="7">4</button>
+                <button type="button" class="feature-item" data-number="7">5</button>
+                <button type="button" class="feature-item" data-number="7">6</button>
+                <button type="button" class="feature-item" data-operator="+">-</button>
+                <button type="button" class="feature-item">log</button>
+                <button type="button" class="feature-item" data-number="7">1</button>
+                <button type="button" class="feature-item" data-number="7">2</button>
+                <button type="button" class="feature-item" data-number="7">3</button>
+                <button type="button" class="feature-item" data-operator="-">+</button>
+                <button type="button" class="feature-item">ln</button>
+                <button type="button" class="feature-item">+/-</button>
+                <button type="button" class="feature-item" data-number="7">0</button>
+                <button type="button" class="feature-item">.</button>
+                <button type="button" class="feature-item" data-result="=">=</button>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
