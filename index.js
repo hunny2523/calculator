@@ -21,12 +21,12 @@ buttons.addEventListener('click', (e) => {
         }
     }
     else if (value.result) {
-        if(checkForNumber(display.value)){
+        if (checkForNumber(display.value)) {
             console.log("valid");
-            display.value=postfixEvaluation(display.value);
+            display.value = postfixEvaluation(display.value);
         }
-        else{
-            display.value="";
+        else {
+            display.value = "";
         }
     }
     else if (value.unary) {
@@ -47,17 +47,17 @@ buttons.addEventListener('click', (e) => {
 
 function checkPreviousElement(element) {
     let displayLength = display.value.length;
-    if (display.value.charAt(displayLength - 1).match(/[0-9]/)) {
-        return true;
+    if (display.value.charAt(displayLength - 1).match(/[+|/|*|%|^]/)) {
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
 function checkForNumber(expression) {
     console.log(expression);
-    if(expression.match(/[a-df-z]/gi)){
+    if (expression.match(/[a-df-z]/gi)) {
         alert("invalid input")
         return false;
     }
@@ -89,61 +89,46 @@ function removeLastElement(value) {
 
 
 
-
-function infixToPostFix(expression) {
-    expression = "(" + expression + ")";
-    console.log("expression: "+expression);
-    let output = "";
-    let i=0;
+function infixToPostFix(inputString) {
+    inputString = "(" + inputString + ")";
+    let expression = convertToArr(inputString)
+    console.log("expression: " + expression);
     const stack = [];
-    while (i<expression.length) {
-        char=expression[i]
-      
-        if (!isNaN(char)) {
-            console.log(output+"output");
-            output += char;
-            i++;
-            while(!isNaN(expression[i]) || expression[i]=="."){
-                output+=expression[i];
-                i++;
-            }
-            output+=" ";
+    let output = [];
 
-           
+    console.log(typeof expression);
+    for (i in expression) {
+        console.log(expression[i])
+        if (expression[i].match(/[0-9]|\./g)) {
+            console.log("number");
+            output.push(expression[i]);
         }
-        else if (char == "(") {
-            stack.push(char);
-            i++;
+        else if (expression[i] == "(") {
+            console.log("left paar");
+            stack.push(expression[i])
         }
-        else if (char == ".") {
-            output+=char
-            i++;
-        }
-        else if (char == ")") {
+        else if (expression[i] == ")") {
+            console.log("right para");
             while (stack.slice(-1) != "(") {
-                output +=stack.pop();
-                output+=" ";
+                output.push(stack.pop());
             }
             stack.pop();
-            i++;
         }
         else {
-
-            if (getPrecedence(stack.slice(-1)) >= getPrecedence(char)) {
-                while (getPrecedence(stack.slice(-1)) >= getPrecedence(char)) {
-                    output += stack.pop();
-                  
+            if (getPrecedence(stack.slice(-1)) >= getPrecedence(expression[i])) {
+                while (getPrecedence(stack.slice(-1)) >= getPrecedence(expression[i])) {
+                    output.push(stack.pop());
                 }
-                stack.push(char);
+                stack.push(expression[i]);
             }
-            else{
-                stack.push(char);
+            else {
+                stack.push(expression[i]);
             }
-            output+=" "
-            i++;
         }
+
     }
-    return output;
+return output;
+    
 }
 
 function getPrecedence(char) {
@@ -168,36 +153,37 @@ function getPrecedence(char) {
 
 
 
-function postfixEvaluation(expression){
-    let postfixResult=infixToPostFix(expression);
-    let arr=postfixResult.replaceAll(/  +/g, ' ').trim().split(" ");
+function postfixEvaluation(expression) {
+    let arr = infixToPostFix(expression);
+    console.log(arr);
+ 
 
-    let stack=[];
-    let i=0;
-    let x,y;
-    for(i=0;i<arr.length;i++){
-        if(!isNaN(arr[i])){
+    let stack = [];
+    let i = 0;
+    let x, y;
+    for (i = 0; i < arr.length; i++) {
+        if (!isNaN(arr[i])) {
             stack.push(arr[i])
         }
-        else{
-            y=Number(stack.pop());
-            x=Number(stack.pop());
-            switch(arr[i]){
+        else {
+            y = Number(stack.pop());
+            x = Number(stack.pop());
+            switch (arr[i]) {
                 case "+":
-                    temp=x+y; break;
+                    temp = x + y; break;
                 case "-":
-                    temp=x-y; break;
+                    temp = x - y; break;
                 case "*":
-                    temp=x*y; break;
+                    temp = x * y; break;
                 case "/":
-                    temp=x/y; break;
+                    temp = x / y; break;
                 case "^":
-                    temp=x**y; break;
+                    temp = x ** y; break;
                 case "%":
-                    temp=x%y; break;
+                    temp = x % y; break;
                 default:
                     alert("error");
-                }
+            }
             stack.push(temp);
         }
     }
@@ -217,6 +203,62 @@ function postfixEvaluation(expression){
 
 
 
+function convertToArr(expression) {
+    const output = [];
+    let temp = "";
+    let i = 0;
+    while (i < expression.length) {
+
+        if (expression[i] == "-") {
+            // check for operator 
+            if ((i == 0 && expression[0] == "-") || expression[i - 1] == ")" || isNaN(expression[i - 1])) {
+                console.log("insideee minus");
+                temp += expression[i];
+                i++;
+                while (!isNaN(expression[i]) || expression[i] == ".") {
+                    temp += expression[i];
+                    i++;
+                }
+                // if(temp.match(/[]/))
+                // solve problem for more than one period
+                output.push(temp);
+                temp = "";
+            }
+            else {
+                output.push(expression[i]);
+                i++;
+            }
+        }
+        else if (!isNaN(expression[i]) || expression[i]==".") {
+            temp += expression[i];
+            i++;
+            while (!isNaN(expression[i]) || expression[i] == ".") {
+                temp += expression[i];
+                i++;
+            }
+            output.push(temp);
+            temp = "";
+        }
+
+        else if (expression[i] == "(") {
+            output.push(expression[i]);
+            i++;
+        }
+
+        else if (expression[i] == ")") {
+
+            output.push(expression[i]);
+            i++;
+        }
+        else {
+            output.push(expression[i]);
+            i++;
+        }
+    }
+
+    console.log("after converting into array"+output)
+    return output;
+}
 
 
 
