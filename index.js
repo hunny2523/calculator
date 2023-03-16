@@ -9,7 +9,7 @@ const buttons = document.querySelector(".main-features");
 
 
 buttons.addEventListener('click', (e) => {
-    console.log(e.target.dataset);
+
     let value = e.target.dataset;
 
     if (value.number) {
@@ -22,7 +22,7 @@ buttons.addEventListener('click', (e) => {
     }
     else if (value.result) {
         if (checkForNumber(display.value)) {
-            console.log("valid");
+            
             display.value = postfixEvaluation(display.value);
         }
         else {
@@ -34,7 +34,7 @@ buttons.addEventListener('click', (e) => {
         // display.value=evaluateUnaryOperation(value.unary)
     }
     else if (value.value) {
-        console.log(value.value);
+       
         display.value += value.value;
     }
     else if (value.clear) {
@@ -56,7 +56,7 @@ function checkPreviousElement(element) {
 }
 
 function checkForNumber(expression) {
-    console.log(expression);
+    
     if (expression.match(/[a-df-z]/gi)) {
         alert("invalid input")
         return false;
@@ -92,23 +92,23 @@ function removeLastElement(value) {
 function infixToPostFix(inputString) {
     inputString = "(" + inputString + ")";
     let expression = convertToArr(inputString)
-    console.log("expression: " + expression);
+ 
     const stack = [];
     let output = [];
 
-    console.log(typeof expression);
+
     for (i in expression) {
-        console.log(expression[i])
+   
         if (expression[i].match(/[0-9]|\./g)) {
-            console.log("number");
+   
             output.push(expression[i]);
         }
         else if (expression[i] == "(") {
-            console.log("left paar");
+       
             stack.push(expression[i])
         }
         else if (expression[i] == ")") {
-            console.log("right para");
+          
             while (stack.slice(-1) != "(") {
                 output.push(stack.pop());
             }
@@ -127,8 +127,8 @@ function infixToPostFix(inputString) {
         }
 
     }
-return output;
-    
+    return output;
+
 }
 
 function getPrecedence(char) {
@@ -155,8 +155,8 @@ function getPrecedence(char) {
 
 function postfixEvaluation(expression) {
     let arr = infixToPostFix(expression);
-    console.log(arr);
- 
+   
+
 
     let stack = [];
     let i = 0;
@@ -204,15 +204,47 @@ function postfixEvaluation(expression) {
 
 
 function convertToArr(expression) {
-    const output = [];
+    let output = [];
     let temp = "";
     let i = 0;
     while (i < expression.length) {
 
         if (expression[i] == "-") {
             // check for operator 
-            if ((i == 0 && expression[0] == "-") || expression[i - 1] == ")" || isNaN(expression[i - 1])) {
-                console.log("insideee minus");
+
+            if(expression[i+1]=="-"){
+                expression=expression.slice(0,i)+expression.slice(i+2,expression.length)
+            }
+            else if (expression[i + 1] == "(") {
+             
+                let j = i + 1;
+                let temp2 = "(";
+                const tempStack = [];
+                tempStack.push("(");
+                while (tempStack.includes("(")) {
+                    if (expression[j + 1] == "(") {
+                        tempStack.push("(");
+                    }
+                    else if (expression[j + 1] == ")") {
+                        tempStack.pop();
+                    }
+                    temp2 += expression[j + 1];
+                    j++;
+                }
+                let count = j - i;
+         
+                let solved = postfixEvaluation(temp2);
+              
+              
+                expression = expression.substring(0, i + 1) + solved + expression.substring(j + 1, expression.length);
+              
+                i = 0;
+                output = [];
+                temp = ""
+            }
+
+            else if ((i == 0 && expression[0] == "-") || expression[i - 1] == ")" || isNaN(expression[i - 1])) {
+               
                 temp += expression[i];
                 i++;
                 while (!isNaN(expression[i]) || expression[i] == ".") {
@@ -229,7 +261,7 @@ function convertToArr(expression) {
                 i++;
             }
         }
-        else if (!isNaN(expression[i]) || expression[i]==".") {
+        else if (!isNaN(expression[i]) || expression[i] == ".") {
             temp += expression[i];
             i++;
             while (!isNaN(expression[i]) || expression[i] == ".") {
@@ -256,7 +288,7 @@ function convertToArr(expression) {
         }
     }
 
-    console.log("after converting into array"+output)
+ 
     return output;
 }
 
