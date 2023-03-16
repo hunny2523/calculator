@@ -1,13 +1,14 @@
+// equals sign for number
 const equalsTo = document.querySelector('[data-display]');
+
+// display screen
 const display = document.querySelector('input');
 
-
-const numbers = document.querySelector('[data-number]');
-const operators = document.querySelector('[data-operator]');
-
+// All buttons
 const buttons = document.querySelector(".main-features");
 
 
+// click event for all buttons
 buttons.addEventListener('click', (e) => {
 
     let value = e.target.dataset;
@@ -15,36 +16,58 @@ buttons.addEventListener('click', (e) => {
     if (value.number) {
         display.value += value.number
     }
+
     else if (value.operator) {
         if (checkPreviousElement()) {
             display.value += value.operator;
         }
     }
+
     else if (value.result) {
-        if (checkForNumber(display.value)) {
-            
-            display.value = postfixEvaluation(display.value);
+        if(!checkParenthesis(display.value)){
+            alert("invalid input, check for parenthesis");
         }
-        else {
-            display.value = "";
+        else{
+            if (checkForNumber(display.value)) {
+                display.value = postfixEvaluation(display.value);
+            }
+            else {
+                display.value=evaluateAdvanceFunction(display.value);
+            }
         }
     }
+
     else if (value.unary) {
         display.value += value.unary;
-        // display.value=evaluateUnaryOperation(value.unary)
     }
+
     else if (value.value) {
        
         display.value += value.value;
     }
+
     else if (value.clear) {
         display.value = "";
     }
+
     else if (value.backspace) {
         display.value = removeLastElement(display.value);
     }
-})
 
+    else if(value.pi){
+        console.log(display.value.slice(-1));
+        if(!isNaN( display.value.slice(-1)) && display.value.slice(-1)!=""){
+            console.log("pi");
+            display.value+="*"
+        }
+        display.value+=Math.PI;
+    }
+
+},true)
+
+
+
+// check previous element if it is operator then return false (it stops writing more than operators sequentially)
 function checkPreviousElement(element) {
     let displayLength = display.value.length;
     if (display.value.charAt(displayLength - 1).match(/[+|/|*|%|^]/)) {
@@ -55,40 +78,41 @@ function checkPreviousElement(element) {
     }
 }
 
+
+// if alphabets are then shows invalid input
 function checkForNumber(expression) {
     
     if (expression.match(/[a-df-z]/gi)) {
-        alert("invalid input")
         return false;
     }
     return true;
 }
 
-// function evaluateUnaryOperation(operator){
-//     let value=display.value;
-//     if(checkForNumber(value)){
-//         switch (operator) {
-//             case mod:
-//                 return
-//                 break;
 
-//             default:
-//                 break;
-//         }
-//     }
-//     else{
-//         log("unvalid")
-//     }
-// }
+// check for balance parenthesis
+function checkParenthesis(expression){
+    const openParenthesis=expression.match(/\(/g);
+    const closeParenthesis=expression.match(/\)/g);
+    if(openParenthesis!=null && closeParenthesis!=null && openParenthesis.length===closeParenthesis.length){
+        return true
+    }
+    else{
+        false
+    }
+}
 
 
+
+
+
+// backspace function
 function removeLastElement(value) {
     return value.slice(0, value.length - 1);
 }
 
 
 
-
+// convert infix operation to postfix
 function infixToPostFix(inputString) {
     inputString = "(" + inputString + ")";
     let expression = convertToArr(inputString)
@@ -103,10 +127,12 @@ function infixToPostFix(inputString) {
    
             output.push(expression[i]);
         }
+
         else if (expression[i] == "(") {
        
             stack.push(expression[i])
         }
+
         else if (expression[i] == ")") {
           
             while (stack.slice(-1) != "(") {
@@ -114,6 +140,7 @@ function infixToPostFix(inputString) {
             }
             stack.pop();
         }
+
         else {
             if (getPrecedence(stack.slice(-1)) >= getPrecedence(expression[i])) {
                 while (getPrecedence(stack.slice(-1)) >= getPrecedence(expression[i])) {
@@ -127,10 +154,14 @@ function infixToPostFix(inputString) {
         }
 
     }
+
     return output;
 
 }
 
+
+
+// get Precedence of operators
 function getPrecedence(char) {
     if (char == "*" || char == "/" || char == "%") {
         return 2;
@@ -152,12 +183,10 @@ function getPrecedence(char) {
 
 
 
-
+// evaluate postfix operation
 function postfixEvaluation(expression) {
+
     let arr = infixToPostFix(expression);
-   
-
-
     let stack = [];
     let i = 0;
     let x, y;
@@ -195,15 +224,9 @@ function postfixEvaluation(expression) {
 
 
 
-
-
-
-
-
-
-
-
+// convert String expression to array
 function convertToArr(expression) {
+
     let output = [];
     let temp = "";
     let i = 0;
@@ -251,8 +274,6 @@ function convertToArr(expression) {
                     temp += expression[i];
                     i++;
                 }
-                // if(temp.match(/[]/))
-                // solve problem for more than one period
                 output.push(temp);
                 temp = "";
             }
@@ -271,17 +292,6 @@ function convertToArr(expression) {
             output.push(temp);
             temp = "";
         }
-
-        else if (expression[i] == "(") {
-            output.push(expression[i]);
-            i++;
-        }
-
-        else if (expression[i] == ")") {
-
-            output.push(expression[i]);
-            i++;
-        }
         else {
             output.push(expression[i]);
             i++;
@@ -294,81 +304,64 @@ function convertToArr(expression) {
 
 
 
+function evaluateAdvanceFunction(expression){
+
+    const arrObject={
+        sqrt:function(num ){
+            return Math.sqrt(num)
+        },
+        fact:function(num){
+            return factorial(num)
+        },
+        log:function(num){
+            return Math.log10(num)
+        },
+        ln:function(num){
+            return Math.log(num)
+        },
+        exp:function(num){
+            return Math.exp(num)
+        }
+    }
 
 
+    for(i in arrObject){
 
+        if(expression.includes(i)){
 
+        let regExp=new RegExp(`${i}\\([0-9]+\\)`,"gi")
+     
+        let sqrtArr=expression.match(regExp);
+   
+        let valueArr=getValues(sqrtArr);
+           
+        for(j in valueArr){
+           
+            expression=expression.replace(sqrtArr[j],arrObject[i](valueArr[j]) );
+        }
+        
+    }
+    }
+    console.log(expression+" expression")
+    return postfixEvaluation(expression)
+    
+}
 
+function getValues(arr){
+    let startIndex=arr[0].indexOf("(")
+    let endIndex;
+    arr=arr.map((element)=>{
+      endIndex=element.indexOf(")");
+      return element.slice(startIndex+1,endIndex);
+    })
+    return arr;
+}
 
-
-
-// console.log("hello");
-// let result=infixToPostFix("13*5+6");
-// console.log("result "+result);
-// function infixToPostFix(expression) {
-//     expression = "(" + expression + ")";
-//     console.log("expression: "+expression);
-//     let output = "";
-//     let i=0
-//     const stack = [];
-//     let temp;
-//     for (i=0;i<expression.length;i++) {
-//         char=expression[i]
-//         console.log(char);
-//         if (!isNaN(char)) {
-//             console.log(output+"output");
-//             console.log(char+"char");
-//             console.log(("___"+typeof output.slice(-1)+output.slice(-1)));
-//             if (isNaN(output.slice(-1))) {
-//                 console.log("there");
-//                 output += char
-//                 console.log("after"+output);
-//             }
-//             else {
-//                 console.log("hereee");
-//                 output += " ";
-//                 output += char;
-//             }
-//         }
-//         else if (char == "(") {
-//             stack.push(char);
-//         }
-//         else if (char == ")") {
-//             while (stack.slice(-1) != "(") {
-//                 output +=stack.pop();
-//             }
-//             stack.pop();
-//         }
-//         else {
-
-//             if (getPrecedence(stack.slice(-1)) >= getPrecedence(char)) {
-//                 while (getPrecedence(stack.slice(-1)) >= getPrecedence(char)) {
-//                     output += stack.pop();
-//                 }
-//                 stack.push(char);
-//             }
-//             else{
-//                 stack.push(char);
-//             }
-//         }
-//     }
-//     return output;
-// }
-
-// function getPrecedence(char) {
-//     if (char == "*" || char == "/" || char == "%") {
-//         return 2;
-//     }
-//     else if (char == "+" || char == "-") {
-//         return 1;
-//     }
-//     else if (char == "^") {
-//         return 3;
-//     }
-//     else if (char == "(") {
-//         return 0;
-//     }
-//     else {
-//         return -1;
-//     }
-// }
+function factorial(n){
+    if(n==0 || n==1){
+        return 1;
+    }
+    else{
+        return n*factorial(n-1);
+    }
+}

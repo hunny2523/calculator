@@ -23,6 +23,7 @@ input{
     background: white;
     outline: none;
     max-width: 300px;
+    /* text-overflow: ellipsis; */
 }
 
 
