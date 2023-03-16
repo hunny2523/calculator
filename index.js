@@ -62,6 +62,14 @@ buttons.addEventListener('click', (e) => {
         }
         display.value+=Math.PI;
     }
+    else if(value.e){
+        console.log(display.value.slice(-1));
+        if(!isNaN( display.value.slice(-1)) && display.value.slice(-1)!=""){
+            console.log("e");
+            display.value+="*"
+        }
+        display.value+=Math.E;
+    }
 
 },true)
 
@@ -93,11 +101,17 @@ function checkForNumber(expression) {
 function checkParenthesis(expression){
     const openParenthesis=expression.match(/\(/g);
     const closeParenthesis=expression.match(/\)/g);
+   console.log(openParenthesis)
+   console.log(closeParenthesis)
+   console.log(openParenthesis!=null);
+   if(openParenthesis==null && closeParenthesis==null){
+    return true;
+   }
     if(openParenthesis!=null && closeParenthesis!=null && openParenthesis.length===closeParenthesis.length){
         return true
     }
     else{
-        false
+        return false
     }
 }
 
