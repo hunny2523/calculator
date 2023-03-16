@@ -59,16 +59,36 @@
 
             <!-- trigonometry row (third row) -->
             <div class="third-row p-5" >
-                <div id="trigonometry" class="third-row-div">
+                <div id="trigonometry" class="third-row-div dropdown">
                     <img src="./assets/trigonometry.png" alt="" height="20px" width="20px">
                     <span>Trigonometry</span>
                     <span class="material-symbols-outlined">
                         expand_more</span>
+                        <div class="dropdown-items">
+                            <button type="button" class="dropdown-item" data-value="sin(">sin</button>
+                            <button type="button" class="dropdown-item" data-value="cos(">cos</button>
+                            <button type="button" class="dropdown-item" data-value="tan(">tan</button>
+                            <button type="button" class="dropdown-item" data-value="sini(">sin<sup>-1</sup></button>
+                            <button type="button" class="dropdown-item" data-value="cosi(">cos<sup>-1</sup></button>
+                            <button type="button" class="dropdown-item" data-value="tani(">tan<sup>-1</sup></button>
+                        </div>
                 </div>
-                <div id="functions" class="third-row-div">
+
+                <div id="functions" class="third-row-div dropdown">
                     <img src="./assets/function.png" alt="" height="15px" width="15px">
                     <span>Function</span>
                     <span class="material-symbols-outlined">expand_more</span>
+                    <div class="dropdown-items">
+                        <button type="button" class="dropdown-item" data-value="mod(">|x|</button>
+                        <button type="button" class="dropdown-item" data-value="floor(">&#8970;x&#8971;</button>
+                        <button type="button" class="dropdown-item" data-value="ceil(">&#8968;x&#8969;</button>
+
+
+                        <!-- for future -->
+                        <!-- <button type="button" class="dropdown-item" data-value="sini(">sin<sup>-1</sup></button>
+                        <button type="button" class="dropdown-item" data-value="cosi(">cos<sup>-1</sup></button>
+                        <button type="button" class="dropdown-item" data-value="tani(">tan<sup>-1</sup></button> -->
+                    </div>
                 </div>
             </div>
 
@@ -78,28 +98,31 @@
 
                 <!-- row one -->
 
-                <button type="button" class="feature-item">2<sup>nd</sup></button>
+                <button type="button" class="feature-item" data-flip="flip">2<sup>nd</sup></button>
                 <button type="button" class="feature-item" data-pi="&#960;"> &pi;</button>
                 <button type="button" class="feature-item" data-e="e">e</button>
                 <button type="button" class="feature-item" data-clear="C">C</button>
                 <button type="button" class="feature-item material-symbols-outlined" data-backspace="back">backspace</button>
 
                 <!-- row two -->
-                <button type="button" class="feature-item" data-value="^2">x<sup>2</sup></button>
+                <button type="button" class="feature-item  extra-feature" data-value="^3">x<sup>3</sup></button>
+                <button type="button" class="feature-item flip-btn" data-value="^2">x<sup>2</sup></button>
                 <button type="button" class="feature-item" data-value="1/">1/x</button>
                 <button type="button" class="feature-item" data-unary="mod(">|x|</button>
                 <button type="button" class="feature-item" data-unary="exp(">exp</button>
                 <button type="button" class="feature-item" data-operator="%">mod</button>
 
                 <!-- row three -->
-                <button type="button" class="feature-item" data-unary="sqrt("> &#8730;x</button>
+                <button type="button" class="feature-item  extra-feature" data-unary="cbrt("> &#8731;x</button>
+                <button type="button" class="feature-item flip-btn" data-unary="sqrt("> &#8730;x</button>
                 <button type="button" class="feature-item" data-value="(">(</button>
                 <button type="button" class="feature-item" data-value=")">)</button>
                 <button type="button" class="feature-item" data-unary="fact(">n!</button>
                 <button type="button" class="feature-item" data-operator="/">&#247;</button>
 
                 <!-- row four -->
-                <button type="button" class="feature-item" data-value="^">x<sup>y</sup></button>
+                <button type="button" class="feature-item  extra-feature" data-value="root"><sup>y</sup>&#8730;x</button>
+                <button type="button" class="feature-item flip-btn" data-value="^">x<sup>y</sup></button>
                 <button type="button" class="feature-item" data-number="7">7</button>
                 <button type="button" class="feature-item" data-number="8">8</button>
                 <button type="button" class="feature-item" data-number="9">9</button>
@@ -107,21 +130,24 @@
 
 
                 <!-- row five -->
-                <button type="button" class="feature-item" data-unary="10^">10 <sup>x</sup></button>
+                <button type="button" class="feature-item extra-feature" data-unary="2^">2 <sup>x</sup></button>
+                <button type="button" class="feature-item flip-btn" data-unary="10^">10 <sup>x</sup></button>
                 <button type="button" class="feature-item"  data-number="4">4</button>
                 <button type="button" class="feature-item" data-number="5">5</button>
                 <button type="button" class="feature-item" data-number="6">6</button>
                 <button type="button" class="feature-item" data-operator="-">-</button>
 
                 <!-- row six -->
-                <button type="button" class="feature-item" data-unary="log(">log</button>
+                <button type="button" class="feature-item  extra-feature" data-unary="logyx">log<sub>y</sub>x</button>
+                <button type="button" class="feature-item flip-btn" data-unary="log(">log</button>
                 <button type="button" class="feature-item" data-number="1">1</button>
                 <button type="button" class="feature-item" data-number="2">2</button>
                 <button type="button" class="feature-item" data-number="3">3</button>
                 <button type="button" class="feature-item" data-operator="+">+</button>
 
                 <!-- row seven -->
-                <button type="button" class="feature-item" data-unary="ln(">ln</button>
+                <button type="button" class="feature-item  extra-feature" data-unary="e^">e<sup>x</sup></button>
+                <button type="button" class="feature-item flip-btn" data-unary="ln(">ln</button>
                 <button type="button" class="feature-item" data-value="+/-">+/-</button>
                 <button type="button" class="feature-item" data-number="0">0</button>
                 <button type="button" class="feature-item" data-value=".">.</button>
