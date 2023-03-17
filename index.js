@@ -8,25 +8,27 @@ const display = document.querySelector('input');
 const buttons = document.querySelector("#calculator-body");
 
 
-const flipButtons=document.querySelectorAll(".flip-btn");
+const flipButtons = document.querySelectorAll(".flip-btn");
 
-const memoryRecallButton=document.getElementById("memoryRecall");
+const memoryRecallButton = document.getElementById("memoryRecall");
 
-const degButtons=document.querySelectorAll(".deg-btn");
+const degButtons = document.querySelectorAll(".deg-btn");
 
-let degMode=true;
+let degMode = true;
+let memory = false;
 
 
 checkForMemory();
-function checkForMemory(){
+function checkForMemory() {
 
-    if(!localStorage.getItem("memory")){
-
-        memoryRecallButton.setAttribute("disabled","");
+    if (memory==false) {
+        console.log("here");
+        memoryRecallButton.setAttribute("disabled", "");
     }
-    else{
-    
-        memoryRecallButton.removeAttribute("disabled","");
+    else {
+
+        memoryRecallButton.removeAttribute("disabled", "");
+        console.log("here");
     }
 
 }
@@ -53,7 +55,7 @@ buttons.addEventListener('click', (e) => {
             alert("invalid input, check for parenthesis");
         }
         else {
-            display.value=evaluateExpression(display.value);
+            display.value = evaluateExpression(display.value);
         }
     }
 
@@ -65,7 +67,7 @@ buttons.addEventListener('click', (e) => {
 
         display.value += value.value;
     }
-    else if(value.memory){
+    else if (value.memory) {
         memorySetUp(value.memory);
     }
 
@@ -93,25 +95,25 @@ buttons.addEventListener('click', (e) => {
         }
         display.value += Math.E;
     }
-    else if(value.flip){
+    else if (value.flip) {
         console.log("clicked");
         flipButtons.forEach(btn => {
             btn.classList.toggle("hide-btn");
         });
-        
+
     }
-    else if(value.deg){
+    else if (value.deg) {
         console.log('here');
-        degButtons.forEach((btn)=>{
-                    btn.classList.toggle("hide-btn");
-                })
-        degMode=!degMode;
-        
+        degButtons.forEach((btn) => {
+            btn.classList.toggle("hide-btn");
+        })
+        degMode = !degMode;
+
     }
-    else{
+    else {
         console.log("another");
     }
-    
+
 }, true)
 
 
@@ -168,7 +170,7 @@ function removeLastElement(value) {
 
 
 
-function evaluateExpression(expression){
+function evaluateExpression(expression) {
     console.log(expression);
     if (checkForNumber(expression)) {
         console.log("here");
@@ -290,8 +292,8 @@ function postfixEvaluation(expression) {
             stack.push(temp);
         }
     }
-    let result=stack.pop();
-    return Number.isInteger(result)? result : Number(result).toFixed(2);
+    let result = stack.pop();
+    return Number.isInteger(result) ? result : Number(result).toFixed(2);
 }
 
 
@@ -407,22 +409,22 @@ function evaluateAdvanceFunction(expression) {
             return Math.exp(num);
         },
         sini: function (num) {
-            return degMode ? Math.sini(num*Math.PI/180).toFixed(2) : Math.sini(num).toFixed(2) ;
+            return degMode ? Math.sini(num * Math.PI / 180).toFixed(2) : Math.sini(num).toFixed(2);
         },
         cosi: function (num) {
-            return degMode ? Math.cosi(num*Math.PI/180).toFixed(2) : Math.cosi(num).toFixed(2) ;
+            return degMode ? Math.cosi(num * Math.PI / 180).toFixed(2) : Math.cosi(num).toFixed(2);
         },
         tani: function (num) {
-            return degMode ? Math.tani(num*Math.PI/180).toFixed(2) : Math.tani(num).toFixed(2) ;
+            return degMode ? Math.tani(num * Math.PI / 180).toFixed(2) : Math.tani(num).toFixed(2);
         },
         sin: function (num) {
-            return degMode ? Math.sin(num*Math.PI/180).toFixed(2): Math.sin(num).toFixed(2);
+            return degMode ? Math.sin(num * Math.PI / 180).toFixed(2) : Math.sin(num).toFixed(2);
         },
         cos: function (num) {
-            return degMode ? Math.cos(num*Math.PI/180).toFixed(2) : Math.cos(num).toFixed(2) ;
+            return degMode ? Math.cos(num * Math.PI / 180).toFixed(2) : Math.cos(num).toFixed(2);
         },
         tan: function (num) {
-            return degMode ? Math.tan(num*Math.PI/180).toFixed(2) : Math.tan(num).toFixed(2) ;
+            return degMode ? Math.tan(num * Math.PI / 180).toFixed(2) : Math.tan(num).toFixed(2);
         },
         cbrt: function (num) {
             return Math.cbrt(num);
@@ -433,7 +435,7 @@ function evaluateAdvanceFunction(expression) {
         rad: function (num) {
             return foundRad(num);
         }
-       
+
     }
 
 
@@ -444,21 +446,17 @@ function evaluateAdvanceFunction(expression) {
             console.log(i);
             let regExp = new RegExp(`${i}\\([-+]?[0-9]*\.?[0-9]*\\)`, "gi")
             console.log(regExp);
-            let functionArr= expression.match(regExp);
+            let functionArr = expression.match(regExp);
             console.log(functionArr);
             let valueArr = getValues(functionArr);
             console.log(valueArr);
             for (j in valueArr) {
-
                 expression = expression.replace(functionArr[j], arrObject[i](valueArr[j]));
             }
 
         }
     }
     console.log(expression + " expression")
-    // if(isNaN(expression)){
-    //     return false;
-    // }
     return postfixEvaluation(expression)
 
 }
@@ -488,59 +486,50 @@ function factorial(n) {
 
 
 
-let memory=0;
 
-function memorySetUp(value){
+
+function memorySetUp(value) {
     console.log(value);
 
-    if(value!="MR" && value!="MC" && display.value==""){
+    if (value != "MR" && value != "MC" && display.value == "") {
         alert("Give Input");
     }
-    else{
+    else {
 
         switch (value) {
             case "M+":
-    
-                memory+=Number(evaluateExpression(display.value))
-                localStorage.setItem("memory",memory);
-                
-    
+
+                memory += Number(evaluateExpression(display.value))
+               
                 break;
-        
+
             case "M-":
-                
-            memory-=Number(evaluateExpression(display.value))
-            localStorage.setItem("memory",memory);
-    
-    
-                break;
+
+                memory -= Number(evaluateExpression(display.value))
         
+                break;
+
             case "MR":
-                
-            display.value=localStorage.getItem("memory");
-    
-            
-    
+
+                display.value = memory;
+
                 break;
-        
+
             case "MC":
-                
-                memory=0;
-                localStorage.clear();
-    
+
+                memory = false;
+               
                 break;
-        
-            case "MS": 
-            memory=Number(evaluateExpression(display.value))
-                localStorage.setItem("memory",memory)    
-    
+
+            case "MS":
+                memory = Number(evaluateExpression(display.value))
                 break;
-        
+
             default:
                 alert("Invalid input at memory section")
                 break;
         }
     }
     checkForMemory();
-   
+
 }
