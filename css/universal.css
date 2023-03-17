@@ -5,7 +5,7 @@ body{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    background-color: rgb(57, 57, 57);
+    background-color: rgb(69, 69, 69);
     font-size: 15px;
     font-family:  'Roboto', sans-serif;
 }
@@ -19,10 +19,10 @@ button{
         background-color: rgb(248, 248, 248);
 }
 input{
-    border: 1px solid rgb(218, 218, 218);
-    background: white;
+    border: none;
+    background: none;
     outline: none;
-    max-width: 300px;
+    max-width: 320px;
     /* text-overflow: ellipsis; */
 }
 
@@ -30,7 +30,7 @@ input{
 /* Utility Classes  */
 
 .p-5{
-    padding: 5px;
+    padding: 7px;
 }
 
 
@@ -40,7 +40,8 @@ input{
 
 #calculator-body{
     background-color: rgb(240, 240, 240);
-    border-radius: 5px;
+    box-shadow: 0px 0px 6px rgb(151, 151, 151);
+    border-radius: 2px;
     padding: 10px;
 }
 
@@ -68,7 +69,7 @@ input{
 
 
 .degree-section-item{
-    padding: 0px 15px;
+    padding: 0px 10px;
     font-weight: 500;
 }
 
@@ -81,8 +82,8 @@ input{
 .memory-units{
     background-color: transparent;
 }
-.memory-units:hover{
-    color: rgb(55, 55, 55);
+.memory-units:hover ,.degree-section-item:hover{
+    color: rgb(83, 83, 83);
 }
 
 .third-row{
@@ -137,8 +138,8 @@ input{
 
 
 .feature-item{
-    height: 40px;
-    width: 60px;
+    height: 43px;
+    width: 65px;
 }
 
 .hide-btn{
@@ -152,11 +153,13 @@ input{
 }
 
 .feature-item[data-result]{
-    background-color: rgb(72, 188, 255);
+    background-color: rgb(130, 209, 255);
+
 }
 
 .feature-item[data-result]:hover{
-    background-color: rgb(130, 209, 255);
+    background-color: rgb(72, 188, 255);
+  
 }
 
 .feature-item:hover{

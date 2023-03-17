@@ -26,7 +26,6 @@ function checkForMemory() {
         memoryRecallButton.setAttribute("disabled", "");
     }
     else {
-
         memoryRecallButton.removeAttribute("disabled", "");
         console.log("here");
     }
@@ -39,6 +38,7 @@ function checkForMemory() {
 buttons.addEventListener('click', (e) => {
 
     let value = e.target.dataset;
+
 
     if (value.number) {
         display.value += value.number
@@ -55,17 +55,33 @@ buttons.addEventListener('click', (e) => {
             alert("invalid input, check for parenthesis");
         }
         else {
-            display.value = evaluateExpression(display.value);
+            if(checkForScientificNotation()){
+                alert("It doesn't accept scientific notation");
+            }
+            else{
+                display.value = evaluateExpression(display.value);
+            }
         }
     }
 
     else if (value.unary) {
+        addMultiplication();
         display.value += value.unary;
+       
     }
 
     else if (value.value) {
+        if(checkPreviousElement()){  
+            display.value += value.value;
+        }
+    }
+    else if (value.bracket) {
 
-        display.value += value.value;
+        display.value += value.bracket;
+    }
+    else if (value.period) {
+
+        display.value += value.period;
     }
     else if (value.memory) {
         memorySetUp(value.memory);
@@ -110,6 +126,24 @@ buttons.addEventListener('click', (e) => {
         degMode = !degMode;
 
     }
+    else if (value.minus) {
+       if(display.value.charAt(0)=="(" || !isNaN(display.value.charAt(0))){
+        display.value="-"+display.value;
+       }
+       else if(display.value.charAt(0)=="-"){
+        display.value=display.value.slice(1)
+       }
+
+    }
+    else if(value.fe){
+        if(checkForNumber(display.value) && display.value!=""){
+            console.log("fe");
+            display.value=Number(display.value).toExponential(5);
+        }
+        else{
+            alert("invalid number")
+        }
+    }
     else {
         console.log("another");
     }
@@ -119,13 +153,22 @@ buttons.addEventListener('click', (e) => {
 
 
 // check previous element if it is operator then return false (it stops writing more than operators sequentially)
-function checkPreviousElement(element) {
+function checkPreviousElement() {
     let displayLength = display.value.length;
-    if (display.value.charAt(displayLength - 1).match(/[+|/|*|%|^]/)) {
+    let previousElement=display.value.charAt(displayLength - 1);
+    if (previousElement.match(/[+|/|*|%|^]/) || previousElement=="") {
+        console.log("herrree");
         return false;
     }
     else {
         return true;
+    }
+}
+
+
+function addMultiplication(){
+    if ((!isNaN(display.value.slice(-1))||display.value.slice(-1)==")") && display.value.slice(-1) != "") {
+        display.value += "*"
     }
 }
 
@@ -139,6 +182,16 @@ function checkForNumber(expression) {
     return true;
 }
 
+
+
+function checkForScientificNotation(){
+    if(display.value.includes("e+")){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 // check for balance parenthesis
 function checkParenthesis(expression) {
@@ -293,7 +346,11 @@ function postfixEvaluation(expression) {
         }
     }
     let result = stack.pop();
-    return Number.isInteger(result) ? result : Number(result).toFixed(2);
+    console.log(result);
+    if(Math.trunc(result).toString().length>=15){
+        return "Out Of Range"
+    }
+    return Number.isInteger(Number(result)) ? result : Number(result).toFixed(2);
 }
 
 
@@ -399,14 +456,17 @@ function evaluateAdvanceFunction(expression) {
         fact: function (num) {
             return factorial(num);
         },
+        log2: function (num) {
+            return Math.log2(num).toFixed(2);
+        },
         log: function (num) {
-            return Math.log10(num);
+            return Math.log10(num).toFixed(2);
         },
         ln: function (num) {
-            return Math.log(num);
+            return Math.log(num).toFixed(2);
         },
         exp: function (num) {
-            return Math.exp(num);
+            return Math.exp(num).toFixed(2);
         },
         sini: function (num) {
             return degMode ? Math.sini(num * Math.PI / 180).toFixed(2) : Math.sini(num).toFixed(2);
@@ -444,20 +504,47 @@ function evaluateAdvanceFunction(expression) {
         if (expression.includes(i)) {
             console.log(expression);
             console.log(i);
-            let regExp = new RegExp(`${i}\\([-+]?[0-9]*\.?[0-9]*\\)`, "gi")
+            let regExp = new RegExp(`${i}\\([-+]?[0-9]+\.?[0-9]*\\)`, "gi")
             console.log(regExp);
             let functionArr = expression.match(regExp);
-            console.log(functionArr);
-            let valueArr = getValues(functionArr);
-            console.log(valueArr);
-            for (j in valueArr) {
-                expression = expression.replace(functionArr[j], arrObject[i](valueArr[j]));
+           try {
+
+            
+            if(functionArr!=null){
+
+
+
+                // remove this if (temporary solution)
+                if(functionArr.length>0 && (functionArr[functionArr.length-1].includes("))"))){
+                    console.log(functionArr[functionArr.length-1]);
+                    functionArr[functionArr.length-1]=functionArr[functionArr.length-1].replace("))",")");
+    
+                    console.log(expression);
+                }
+
+
+                console.log(functionArr);
+                let valueArr = getValues(functionArr);
+                console.log(valueArr);
+                for (j in valueArr) {
+                    if(!isNaN(valueArr[j])){
+                        expression = expression.replace(functionArr[j], arrObject[i](valueArr[j]));
+                    }
+                    else{
+                        expression = expression.replace(functionArr[j], arrObject[i](evaluateExpression(valueArr[j])));
+                    }
+                }
             }
+           } catch (error) {
+            alert(error)
+           }
+            
 
         }
     }
     console.log(expression + " expression")
-    return postfixEvaluation(expression)
+    // expression+=")"
+    return evaluateExpression(expression)
 
 }
 
