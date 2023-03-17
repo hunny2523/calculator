@@ -78,6 +78,12 @@ input{
     align-items: center;
     font-weight: 500;
 }
+.memory-units{
+    background-color: transparent;
+}
+.memory-units:hover{
+    color: rgb(55, 55, 55);
+}
 
 .third-row{
     display: flex;
@@ -135,7 +141,7 @@ input{
     width: 60px;
 }
 
-.extra-feature{
+.hide-btn{
     display: none;
 }
 

@@ -8,6 +8,31 @@ const display = document.querySelector('input');
 const buttons = document.querySelector("#calculator-body");
 
 
+const flipButtons=document.querySelectorAll(".flip-btn");
+
+const memoryRecallButton=document.getElementById("memoryRecall");
+
+const degButtons=document.querySelectorAll(".deg-btn");
+
+let degMode=true;
+
+
+checkForMemory();
+function checkForMemory(){
+
+    if(!localStorage.getItem("memory")){
+
+        memoryRecallButton.setAttribute("disabled","");
+    }
+    else{
+    
+        memoryRecallButton.removeAttribute("disabled","");
+    }
+
+}
+
+
+
 // click event for all buttons
 buttons.addEventListener('click', (e) => {
 
@@ -28,12 +53,7 @@ buttons.addEventListener('click', (e) => {
             alert("invalid input, check for parenthesis");
         }
         else {
-            if (checkForNumber(display.value)) {
-                display.value = postfixEvaluation(display.value);
-            }
-            else {
-                display.value = evaluateAdvanceFunction(display.value);
-            }
+            display.value=evaluateExpression(display.value);
         }
     }
 
@@ -44,6 +64,9 @@ buttons.addEventListener('click', (e) => {
     else if (value.value) {
 
         display.value += value.value;
+    }
+    else if(value.memory){
+        memorySetUp(value.memory);
     }
 
     else if (value.clear) {
@@ -69,6 +92,24 @@ buttons.addEventListener('click', (e) => {
             display.value += "*"
         }
         display.value += Math.E;
+    }
+    else if(value.flip){
+        console.log("clicked");
+        flipButtons.forEach(btn => {
+            btn.classList.toggle("hide-btn");
+        });
+        
+    }
+    else if(value.deg){
+        console.log('here');
+        degButtons.forEach((btn)=>{
+                    btn.classList.toggle("hide-btn");
+                })
+        degMode=!degMode;
+        
+    }
+    else{
+        console.log("another");
     }
     
 }, true)
@@ -123,6 +164,25 @@ function checkParenthesis(expression) {
 function removeLastElement(value) {
     return value.slice(0, value.length - 1);
 }
+
+
+
+
+function evaluateExpression(expression){
+    console.log(expression);
+    if (checkForNumber(expression)) {
+        console.log("here");
+        console.log(display.value);
+        return postfixEvaluation(expression);
+
+    }
+    else {
+        console.log("hereee");
+        return evaluateAdvanceFunction(expression);
+    }
+}
+
+
 
 
 
@@ -230,7 +290,8 @@ function postfixEvaluation(expression) {
             stack.push(temp);
         }
     }
-    return stack.pop();
+    let result=stack.pop();
+    return Number.isInteger(result)? result : Number(result).toFixed(2);
 }
 
 
@@ -322,46 +383,55 @@ function evaluateAdvanceFunction(expression) {
 
     const arrObject = {
         sqrt: function (num) {
-            return Math.sqrt(num)
+            return Math.sqrt(num);
         },
         mod: function (num) {
-            return Math.abs(num)
+            return Math.abs(num);
         },
         floor: function (num) {
-            return Math.floor(num)
+            return Math.floor(num);
         },
         ceil: function (num) {
-            return Math.ceil(num)
+            return Math.ceil(num);
         },
         fact: function (num) {
-            return factorial(num)
+            return factorial(num);
         },
         log: function (num) {
-            return Math.log10(num)
+            return Math.log10(num);
         },
         ln: function (num) {
-            return Math.log(num)
+            return Math.log(num);
         },
         exp: function (num) {
-            return Math.exp(num)
+            return Math.exp(num);
         },
         sini: function (num) {
-            return Math.asin(num)
+            return degMode ? Math.sini(num*Math.PI/180).toFixed(2) : Math.sini(num).toFixed(2) ;
         },
         cosi: function (num) {
-            return Math.acos(num)
+            return degMode ? Math.cosi(num*Math.PI/180).toFixed(2) : Math.cosi(num).toFixed(2) ;
         },
         tani: function (num) {
-            return Math.atan(num)
+            return degMode ? Math.tani(num*Math.PI/180).toFixed(2) : Math.tani(num).toFixed(2) ;
         },
         sin: function (num) {
-            return Math.sin(num)
+            return degMode ? Math.sin(num*Math.PI/180).toFixed(2): Math.sin(num).toFixed(2);
         },
         cos: function (num) {
-            return Math.cos(num)
+            return degMode ? Math.cos(num*Math.PI/180).toFixed(2) : Math.cos(num).toFixed(2) ;
         },
         tan: function (num) {
-            return Math.tan(num)
+            return degMode ? Math.tan(num*Math.PI/180).toFixed(2) : Math.tan(num).toFixed(2) ;
+        },
+        cbrt: function (num) {
+            return Math.cbrt(num);
+        },
+        deg: function (num) {
+            return foundDeg(num);
+        },
+        rad: function (num) {
+            return foundRad(num);
         }
        
     }
@@ -386,9 +456,9 @@ function evaluateAdvanceFunction(expression) {
         }
     }
     console.log(expression + " expression")
-    if(isNaN(expression)){
-        return false;
-    }
+    // if(isNaN(expression)){
+    //     return false;
+    // }
     return postfixEvaluation(expression)
 
 }
@@ -410,4 +480,67 @@ function factorial(n) {
     else {
         return n * factorial(n - 1);
     }
+}
+
+
+
+
+
+
+
+let memory=0;
+
+function memorySetUp(value){
+    console.log(value);
+
+    if(value!="MR" && value!="MC" && display.value==""){
+        alert("Give Input");
+    }
+    else{
+
+        switch (value) {
+            case "M+":
+    
+                memory+=Number(evaluateExpression(display.value))
+                localStorage.setItem("memory",memory);
+                
+    
+                break;
+        
+            case "M-":
+                
+            memory-=Number(evaluateExpression(display.value))
+            localStorage.setItem("memory",memory);
+    
+    
+                break;
+        
+            case "MR":
+                
+            display.value=localStorage.getItem("memory");
+    
+            
+    
+                break;
+        
+            case "MC":
+                
+                memory=0;
+                localStorage.clear();
+    
+                break;
+        
+            case "MS": 
+            memory=Number(evaluateExpression(display.value))
+                localStorage.setItem("memory",memory)    
+    
+                break;
+        
+            default:
+                alert("Invalid input at memory section")
+                break;
+        }
+    }
+    checkForMemory();
+   
 }
